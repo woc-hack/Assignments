@@ -1,4 +1,7 @@
-### first get project summaries from P_metadata.T: only projects with 10+ days from first to last commit are selected
+### Note
+files prj, prjSU0, etc used below are in /home/audris, so you do not need to regenerate them
+
+### First get project summaries from P_metadata.T: only projects with 10+ days from first to last commit are selected
 ```bash
 python3 listPM.py > prj
 #get stars from latest ghtorrent dump
@@ -9,7 +12,7 @@ zcat /da5_data/basemaps/gz/ght.users.csv1|cut -d\, -f2,5|grep ,USR | cut -d, -f1
 lsort 1G -t\; -k1,1 <(grep _ prjS|sed 's|_|;|') |join -t\; <(cat prjU | grep -v _ | lsort 1G -t\; -k1,1) - | sed 's|;|_|' > prjSU
 awk -F\; '{if(NF==7){print $0";0"}else{print $0;}}' prjSU > prjSU0
 ```
-### now use R for sampling
+### Now use R for sampling
 ```R
 x  = read.table("prjSU0",sep=";",quote="",comment.char="")
 #name fields (nc1 is commits by top developer)
@@ -66,14 +69,14 @@ summary(lm(lnsd~ldur+lnc+lna+rat, data=za,subs=za$na>0))
 #now get the info on the first 10 commits
 write(as.character(za[,1]),file="pza",ncol=1)
 ```
-
+### calculate relevant properties
 ```bash
 #The sample of projects in pza, lets get commits sorted by time
 cat pza | while read i; do echo $i; done | ~/lookup/getValues -f P2c | awk -F\; '{print $2";"$1}' | ~/lookup/getValues c2dat | perl -ane 's|^[^;]+;||;@x=split(/;/); print "$x[0];$x[1];$x[3]\n"'  | lsort 100G -t\; -k1,2 | gzip > pza.byTime
 #now charaterize the first 10 commits for each project
 zcat pza.byTime| perl -e 'while(<STDIN>){chop();($p,$t,$a)=split(/;/);next if $c{$p}>=10;$c{$p}++;$d{$p}{$a}++;$tf{$p}=$t if $c{$p}==1;$tl{$p}=$t if $c{$p}==10}for $p (keys %d){@x=sort { $d{$p}{$b} <=> $d{$p}{$a} } (keys %{$d{$p}});print "$p;$x[0];$d{$p}{$x[0]};$c{$p};$tf{$p};$tl{$p};$#x\n"}' | gzip > pza.f10
 ```
-
+### Get back to analysis in R
 ```R
 zaf = read.table("pza.f10",sep=";",quote="",comment.char="")
 mat = match(za$p,zaf[,1])
@@ -92,7 +95,7 @@ summary(lm(lns~log(d10+1)+I(as.factor(nf)), data=za,subs=za$na>1))
 summary(lm(lns~log(d10+1)+I(as.factor(nf)), data=za,subs=za$na>10))
 ```
 
-Below is python code to get project summaries
+### Below is python code to get project summaries
 ```python
 import sys, re, pymongo, json
 import requests
