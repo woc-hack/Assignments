@@ -20,18 +20,20 @@ names(x) = c("p","dur","fr","na","nc","nCore","nc1","ns")
 #calculate logs and ranks
 x$lns=log(x$ns+1);x$ldur=log(x$dur+1);x$lna=log(x$na+1);x$lnc=log(x$nc+1);x$rat=x$nc1/x$nc;
 checkc = quantile(x$lnc,(0:100)/100);checka = quantile(x$lna,(0:100)/100);checkd = quantile(x$ldur,(0:100)/100);checks = quantile(x$lns,(0:100)/100);checkr = quantile(x$rat,(0:100)/100);
+# sometimes log-transform still leaves outliers with such extremely skewed data
+# Using rank-transform makes the analysis more robust to such outliers
 for (f in c("lns","lnc","lna","ldur","rat")){
   f1=paste(f,"r",sep="");
   x[,f1] = rank(x[,f]);
 }
-# get 100 quantiles for matching
+# get 100 quantiles for matching unrelated repos
 checkc = quantile(x$lnc,(0:100)/100);checka = quantile(x$lna,(0:100)/100);checkd = quantile(x$ldur,(0:100)/100);checks = quantile(x$lns,(0:100)/100);checkr = quantile(x$rat,(0:100)/100);
 
-#randomly sample 10M
+#randomly sample 10M repos
 sel = sample(1:dim(x)[1],10000000)
 #first a smaller sample for analysis then a larger sample for matching
 za=x[sel,][1:1e6,]    # 1M
-zb=x[sel,][1e6:10e6,] #9M
+zb=x[sel,][1e6+1:10e6,] #9M
 
 #get the number of stars from unrelated but matched by commits or duration repositories
 for (j in 1:100){ sa = za$lnc>= checkc[j] & za$lnc < checkc[j+1];lsa = sum(sa); za$lnsc[sa] = zb$lns[zb$lnc>= checkc[j] & zb$lnc < checkc[j+1]][1:lsa]; };
@@ -46,7 +48,7 @@ plot(mm)
 plot(lowess(za$rat[za$na>0],mm$residuals))
 plot(lowess(za$rat[za$na>0],mml$residuals))
 dev.off()
-
+# a really odd regular shape: why?
 mml300=lm(lns~ldur+lnc+lna+rat, data=za,subs=za$na>300);
 mm300=gam(lns~ldur+lnc+lna+s(rat), data=za,subs=za$na>300);
 png("res300.out",width=2000,height=2000)
@@ -55,16 +57,20 @@ plot(mm300)
 plot(lowess(za$rat[za$na>300],mm300$residuals))
 plot(lowess(za$rat[za$na>300],mml300$residuals))
 dev.off()
+# a really odd regular but different from above shape: why?
 
 #projects with 9+ authors seem to offer good fit
 summary(lm(lns~ldur+lnc+lna+rat, data=za,subs=za$na>8))
 # what is rat: nc1/nc, but nc is already in the model, this is an even better fit!
 summary(lm(lns~ldur+lnc+lna+log(nc1), data=za,subs=za$na>8))
+# the two models were, in fact, equivalent if log(rat) was used instead: why? 
+# does the interpretation differ, if so, why?
 
 #What about replacing with stars from unrelated projects
 summary(lm(lns~ldur+lnc+lna+rat, data=za,subs=za$na>0))
 summary(lm(lnsd~ldur+lnc+lna+rat, data=za,subs=za$na>0))
-#seems like the relationship is still there
+# seems like the relationship is still there
+# What could that mean: we fond the same relationship when we get the response variable from totally unrelated projects?
 
 #now get the info on the first 10 commits
 write(as.character(za[,1]),file="pza",ncol=1)
@@ -80,20 +86,24 @@ zcat pza.byTime| perl -e 'while(<STDIN>){chop();($p,$t,$a)=split(/;/);next if $c
 ```R
 zaf = read.table("pza.f10",sep=";",quote="",comment.char="")
 mat = match(za$p,zaf[,1])
-# number of commits by top person
+# number of commits by top person from among the first 10 commits (f - first)
 za$nf=zaf[mat,3]
 # duration until tenth commit
 za$d10=zaf[mat,6]-zaf[mat,5]
 # number of distinct authors for these 10 commits
-za$na0=zaf[mat,7]+1
+za$na10=zaf[mat,7]+1
 
 #lets model stars based on number of initial 10 commits by top developer and the time until 10th commit
 summary(lm(lns~log(d10+1)+I(as.factor(nf)), data=za,subs=za$na>0))
+# Seems that only duration matters, not other predictors. 
 # now select only projects that had more than 1 authors eventually
 summary(lm(lns~log(d10+1)+I(as.factor(nf)), data=za,subs=za$na>1))
-# now select only projects that had more than 10 authors eventually
+# looks like more levels of nf matter: why?
+#now select only projects that had more than 10 authors eventually
 summary(lm(lns~log(d10+1)+I(as.factor(nf)), data=za,subs=za$na>10))
+# looks like even more levels of nf matter: why?
 ```
+
 
 ### Below is python code to get project summaries
 ```python
