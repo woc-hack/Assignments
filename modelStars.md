@@ -1,4 +1,5 @@
-# first get project summaries from P_metadata.T: only projects with 10+ days from first to last commit are selected
+### first get project summaries from P_metadata.T: only projects with 10+ days from first to last commit are selected
+```bash
 python3 listPM.py > prj
 #get stars from latest ghtorrent dump
 zcat /da5_data/basemaps/gz/ght.P2w.cnt | lsort 10G -u -t\; -k1,1 | join -t\; -a1 <(lsort 1G -t\; -k1,1 prj) - > prjS
@@ -7,8 +8,8 @@ zcat /da5_data/basemaps/gz/ght.users.csv1|cut -d\, -f2,5|grep ,USR | cut -d, -f1
 # merge both and prepare for R input
 lsort 1G -t\; -k1,1 <(grep _ prjS|sed 's|_|;|') |join -t\; <(cat prjU | grep -v _ | lsort 1G -t\; -k1,1) - | sed 's|;|_|' > prjSU
 awk -F\; '{if(NF==7){print $0";0"}else{print $0;}}' prjSU > prjSU0
-
-#now use R for sampling
+```
+### now use R for sampling
 ```R
 x  = read.table("prjSU0",sep=";",quote="",comment.char="")
 #name fields (nc1 is commits by top developer)
