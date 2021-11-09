@@ -48,7 +48,7 @@ plot(mm)
 plot(lowess(za$rat[za$na>0],mm$residuals))
 plot(lowess(za$rat[za$na>0],mml$residuals))
 dev.off()
-# a really odd regular shape: why?
+# Exercise 1: a really odd regular shape: why?
 mml300=lm(lns~ldur+lnc+lna+rat, data=za,subs=za$na>300);
 mm300=gam(lns~ldur+lnc+lna+s(rat), data=za,subs=za$na>300);
 png("res300.out",width=2000,height=2000)
@@ -57,20 +57,20 @@ plot(mm300)
 plot(lowess(za$rat[za$na>300],mm300$residuals))
 plot(lowess(za$rat[za$na>300],mml300$residuals))
 dev.off()
-# a really odd regular but different from above shape: why?
+# Exercise 2: a really odd regular but different from above shape: why?
 
 #projects with 9+ authors seem to offer good fit
 summary(lm(lns~ldur+lnc+lna+rat, data=za,subs=za$na>8))
 # what is rat: nc1/nc, but nc is already in the model, this is an even better fit!
 summary(lm(lns~ldur+lnc+lna+log(nc1), data=za,subs=za$na>8))
-# the two models were, in fact, equivalent if log(rat) was used instead: why? 
-# does the interpretation differ, if so, why?
+# Exercise 3: the two models were, in fact, equivalent if log(rat) was used instead: why? 
+# Exercise 4: does the interpretation differ, if so, why?
 
 #What about replacing with stars from unrelated projects
 summary(lm(lns~ldur+lnc+lna+rat, data=za,subs=za$na>0))
 summary(lm(lnsd~ldur+lnc+lna+rat, data=za,subs=za$na>0))
 # seems like the relationship is still there
-# What could that mean: we fond the same relationship when we get the response variable from totally unrelated projects?
+# Exercise 5: What could that mean: we fond the same relationship when we get the response variable from totally unrelated projects?
 
 #now get the info on the first 10 commits
 write(as.character(za[,1]),file="pza",ncol=1)
@@ -98,10 +98,11 @@ summary(lm(lns~log(d10+1)+I(as.factor(nf)), data=za,subs=za$na>0))
 # Seems that only duration matters, not other predictors. 
 # now select only projects that had more than 1 authors eventually
 summary(lm(lns~log(d10+1)+I(as.factor(nf)), data=za,subs=za$na>1))
-# looks like more levels of nf matter: why?
+# Exercise 6: looks like more levels of nf matter: why?
 #now select only projects that had more than 10 authors eventually
 summary(lm(lns~log(d10+1)+I(as.factor(nf)), data=za,subs=za$na>10))
-# looks like even more levels of nf matter: why?
+# Exercise 7: looks like even more levels of nf matter: why?
+# Exercise 8: recall that projects were selected based on duration: would d10 be still signiofiacant if all projects were in the sample?
 ```
 
 
