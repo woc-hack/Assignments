@@ -1,3 +1,15 @@
+# Problem
+
+Popularity of software projects is one of the important measures of trust whereb, for example, the number of github stars indicate number of developers who "watch" them.
+
+To model this quantity to understand what causes some projects to have more stars we
+collect data from WoC on the project duration, number of authors, number of commits
+and model the number of stars using these predictors.
+
+[About stars](https://www.sciencedirect.com/science/article/pii/S0164121218301961)
+
+[About how developers choose](https://ieeexplore.ieee.org/abstract/document/9091014)
+
 ### Note
 files prj, prjSU0, etc used below are in /home/audris, so you do not need to regenerate them
 
