@@ -12,6 +12,7 @@ determine license type from its text.
 
 
 ```
+# Get all blobs corresponding to license files
 ver=T
 for l in {0..127}
 do zcat b2fLICENSEFull$ver$l.s | \
@@ -41,3 +42,11 @@ do zcat P2LFull$ver.$i.gz|$HOME/bin/lsort ${maxM}M -t\; -k1,2 -u | gzip > P2LFul
    echo P2LFull$ver$i.s
 done
 ```
+
+## Cluster licenses
+
+## Discover license repositries for labeling licenses
+
+
+## Extract licenses from source code files
+
