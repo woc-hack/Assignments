@@ -48,7 +48,8 @@ Use a text analysis technique to cluster license file text and, perhaps, label c
 
 ## Discover license repositories for labeling licenses
 
-- Machene-readable:https://github.com/opensourceorg/licenses
+- Machine-readable official 115 licenses: https://github.com/opensourceorg/licenses
+- Test data (73636 licenses): https://github.com/pombredanne/license-detection-test-data
 
 
 - An official list of licenses: https://opensource.org/licenses/category
