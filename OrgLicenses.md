@@ -9,8 +9,6 @@ clustering and then labeling using known types of licenses and,
 perhaps, developing a supervised (more accurate) technique to
 determine license type from its text.
 
-
-
 ```
 # Get all blobs corresponding to license files
 ver=T
@@ -45,8 +43,28 @@ done
 
 ## Cluster licenses
 
-## Discover license repositries for labeling licenses
+Use a text analysis technique to cluster license file text and, perhaps, label clusters based on the simlarity to official licenses: see below. 
 
+
+## Discover license repositories for labeling licenses
+
+- An official list of licenses: https://opensource.org/licenses/category
+- Analysis of license compatibility: https://www.whitesourcesoftware.com/resources/blog/license-compatibility/
+
+Use the above with some text analysis technique 
 
 ## Extract licenses from source code files
+
+Identify and classify comments at the beginning of the file as license text
+- comments are language specific
+- search for specific keywords
+
+
+## References on empirical work related to OSS licenses and their compatibility
+
+- Wu, Y., Manabe, Y., Kanda, T., German, D. M., & Inoue, K. (2015, May). A method to detect license inconsistencies in large-scale open source projects. In 2015 IEEE/ACM 12th Working Conference on Mining Software Repositories (pp. 324-333). IEEE.
+- Wu, Y., Manabe, Y., Kanda, T., German, D. M., & Inoue, K. (2017). Analysis of license inconsistency in large collections of open source projects. Empirical Software Engineering, 22(3), 1194-1222.
+- Qiu, S., German, D. M., & Inoue, K. (2021). Empirical Study on Dependency-related License Violation in the JavaScript Package Ecosystem. Journal of Information Processing, 29, 296-304.  https://www.jstage.jst.go.jp/article/ipsjjip/29/0/29_296/_pdf
+- Vendome, C., Linares-Vásquez, M., Bavota, G., Di Penta, M., German, D., & Poshyvanyk, D. (2017, May). Machine learning-based detection of open source license exceptions. In 2017 IEEE/ACM 39th International Conference on Software Engineering (ICSE) (pp. 118-129). IEEE.
+
 
