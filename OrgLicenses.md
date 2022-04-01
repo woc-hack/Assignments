@@ -54,6 +54,8 @@ Use a text analysis technique to cluster license file text and, perhaps, label c
 
 - An official list of licenses: https://opensource.org/licenses/category
 - Analysis of license compatibility: https://www.whitesourcesoftware.com/resources/blog/license-compatibility/
+- SPDX list of software licenses: https://spdx.org/licenses/
+
 
 Use the above with some text analysis technique 
 
