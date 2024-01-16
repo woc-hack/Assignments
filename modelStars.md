@@ -26,7 +26,8 @@ awk -F\; '{if(NF==7){print $0";0"}else{print $0;}}' prjSU > prjSU0
 ```
 ### Now use R for sampling
 ```R
-x  = read.table("prjSU0",sep=";",quote="",comment.char="")
+#prjSU0.gz is a large file available at https://zenodo.org/doi/10.5281/zenodo.10516680
+x  = read.table("prjSU0.gz",sep=";",quote="",comment.char="")
 #name fields (nc1 is commits by top developer)
 names(x) = c("p","dur","fr","na","nc","nCore","nc1","ns")
 #calculate logs and ranks
